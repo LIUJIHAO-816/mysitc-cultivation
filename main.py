@@ -11,9 +11,10 @@ from db import db_dao
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     widget = QtWidgets.QWidget()
-    ui = menu_extension.Ui_extension()
+    ui = menu_extension.UiExtension()
     ui.setupUi(widget)
-    ui.listener()
+    ui.ui_init_extension()
+    ui.listen_all()
     widget.setWindowIcon(QIcon('web.png'))  # 增加icon图标，如果没有图片可以没有这句
     widget.setFixedSize(widget.width(), widget.height())
     widget.show()
