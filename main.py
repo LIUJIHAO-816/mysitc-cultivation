@@ -4,7 +4,7 @@ from PyQt5 import QtWidgets
 
 import sys
 import menu_extension
-from action import data_refresh as dr
+from event import evt_refresh as dr
 from PyQt5.QtGui import QIcon
 from db import db_dao
 
@@ -24,8 +24,9 @@ if __name__ == '__main__':
     dao.init_table()
     dao.init_data()
 
-    df = dr.DataFresh()
+    df = dr.Refresh()
     df.re_property(ui)
+    df.re_time(ui)
     df.re_item(ui)
     sys.exit(app.exec_())
 

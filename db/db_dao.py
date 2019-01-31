@@ -9,7 +9,7 @@ class DbDao(object):
         conn = db.connect('data.db', timeout=5)
         cursor = conn.cursor()
         cursor.execute(
-            'create table if not exists property (code varchar(10), name varchar(20), now_value int(4), max_value int(4))')
+            'create table if not exists property (code varchar(10), name varchar(20), now_value int(4), max_value int(4), area int(1))')
         cursor.execute(
             'create table if not exists consum (code varchar(10), name varchar(20), number int(3), function varchar(3), description varchar(255))')
         cursor.execute(
@@ -28,12 +28,13 @@ class DbDao(object):
             'select count(*) from property')
         count = c.fetchone()[0]
         if count <= 0:
-            cursor.executemany('insert into property values(?,?,?,?)', [
-                ('str', '力量', 5, 9999),
-                ('agi', '灵敏', 5, 9999),
-                ('int', '智慧', 5, 9999),
-                ('luk', '幸运', 0, 50),
-                ('sav', '悟性', 0, 50)
+            cursor.executemany('insert into property values(?,?,?,?,?)', [
+                ('str', '力量', 5, 9999, 1),
+                ('agi', '灵敏', 5, 9999, 1),
+                ('int', '智慧', 5, 9999, 1),
+                ('luk', '幸运', 0, 50, 1),
+                ('sav', '悟性', 0, 50, 1),
+                ('time', '修炼时间', 0, 100, 2)
             ])
         c = cursor.execute(
             'select count(*) from consum')
@@ -77,8 +78,18 @@ class DbDao(object):
     def get_property_lst(self):
         conn = db.connect('data.db', timeout=5)
         cursor = conn.cursor()
-        c = cursor.execute("select name, now_value from property")
+        c = cursor.execute("select name, now_value from property where area = 1")
         result = c.fetchall()
+        cursor.close()
+        conn.commit()
+        conn.close()
+        return result
+
+    def get_time_cost(self):
+        conn = db.connect('data.db', timeout=5)
+        cursor = conn.cursor()
+        c = cursor.execute("select now_value, max_value from property where area = 2")
+        result = c.fetchone()
         cursor.close()
         conn.commit()
         conn.close()
@@ -105,9 +116,17 @@ class DbDao(object):
     def get_map_list(self, type):
         conn = db.connect('data.db', timeout=5)
         cursor = conn.cursor()
-        c = cursor.execute("select name from maps where type = ?", (type))
+        c = cursor.execute("select name from maps where type = ?", (type,))
         result = c.fetchall()
         cursor.close()
         conn.commit()
         conn.close()
         return result
+
+    def update_time(self, num):
+        conn = db.connect('data.db', timeout=5)
+        cursor = conn.cursor()
+        cursor.execute("update property set now_value = now_value + ? where code = 'time'", (num,))
+        cursor.close()
+        conn.commit()
+        conn.close()

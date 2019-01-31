@@ -1,5 +1,5 @@
 import menu
-from action import btn_action as ba
+from action import act_btn as ba
 
 
 class UiExtension(menu.Ui_Form):
@@ -10,6 +10,7 @@ class UiExtension(menu.Ui_Form):
         self.listen_btn_map_2()
         self.listen_btn_map_3()
         self.listen_map_lst_sub_map()
+        self.listen_btn_restart()
 
     def ui_init_extension(self):
         self.hide_btn_do()
@@ -37,6 +38,9 @@ class UiExtension(menu.Ui_Form):
     def listen_map_lst_sub_map(self):
         self.lst_sub_map.clicked.connect(self.active_listen_map_lst_sub_map)
 
+    def listen_btn_restart(self):
+        self.btn_restart.clicked.connect(self.active_listen_btn_restart)
+
     def test(self):
         print("test_1")
         ba.ButtonAction().prop_test_1(self)
@@ -44,18 +48,22 @@ class UiExtension(menu.Ui_Form):
     def active_listen_btn_map_1(self):
         print("map1")
         self.hide_btn_do()
-        ba.ButtonAction().show_map_A_list(self)
+        ba.ButtonAction().show_map_a_list(self)
 
     def active_listen_btn_map_2(self):
         print("map2")
         self.hide_btn_do()
-        ba.ButtonAction().show_map_B_list(self)
+        ba.ButtonAction().show_map_b_list(self)
 
     def active_listen_btn_map_3(self):
         print("map3")
         self.hide_btn_do()
-        ba.ButtonAction().show_map_C_list(self)
+        ba.ButtonAction().show_map_c_list(self)
 
     def active_listen_map_lst_sub_map(self):
         self.show_btn_do()
         print("sub_map")
+
+    def active_listen_btn_restart(self):
+        ba.ButtonAction().restart(self)
+        print("restart")
